@@ -1,8 +1,13 @@
+
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Calendar;
+import javax.swing.DefaultComboBoxModel;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
 /**
  *
  * @author ASUS
@@ -14,6 +19,30 @@ public class PerhitunganHariFrame extends javax.swing.JFrame {
      */
     public PerhitunganHariFrame() {
         initComponents();
+
+        // Populating ComboBox with Month Names
+        String[] months = new String[]{
+            "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+            "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+        };
+        cbbBulan.setModel(new DefaultComboBoxModel<>(months));
+
+        // Set initial year range in spinner
+        spTahun.setModel(new javax.swing.SpinnerNumberModel(2024, 1900, 2100, 1));
+
+        // Set default values (current month and year)
+        Calendar currentDate = Calendar.getInstance();
+        int currentMonth = currentDate.get(Calendar.MONTH);  // Get current month (0-11)
+        int currentYear = currentDate.get(Calendar.YEAR);    // Get current year
+
+        // Set the combo box and spinner to the current month and year
+        cbbBulan.setSelectedIndex(currentMonth);
+        spTahun.setValue(currentYear);
+
+        // Sync calendar when the user changes the month or year
+        jCalendar1.getMonthChooser().addPropertyChangeListener("month", evt -> updateComboBox());
+        jCalendar1.getYearChooser().addPropertyChangeListener("year", evt -> updateComboBox());
+
     }
 
     /**
@@ -27,36 +56,49 @@ public class PerhitunganHariFrame extends javax.swing.JFrame {
         java.awt.GridBagConstraints gridBagConstraints;
 
         jPanel1 = new javax.swing.JPanel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jSpinner1 = new javax.swing.JSpinner();
+        cbbBulan = new javax.swing.JComboBox<>();
+        spTahun = new javax.swing.JSpinner();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jCalendar1 = new com.toedter.calendar.JCalendar();
         jPanel2 = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
+        btnHitung = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        lblHari = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
+        lblKabisat = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbbBulan.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbbBulan.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbbBulanItemStateChanged(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        jPanel1.add(jComboBox1, gridBagConstraints);
+        jPanel1.add(cbbBulan, gridBagConstraints);
+
+        spTahun.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                spTahunStateChanged(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        jPanel1.add(jSpinner1, gridBagConstraints);
+        jPanel1.add(spTahun, gridBagConstraints);
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Bulan");
@@ -83,22 +125,99 @@ public class PerhitunganHariFrame extends javax.swing.JFrame {
         getContentPane().add(jPanel1, java.awt.BorderLayout.NORTH);
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(8, 8, 8, 8));
-        jPanel2.setLayout(new java.awt.GridLayout(2, 2));
+        jPanel2.setLayout(new java.awt.GridLayout(3, 2, 6, 4));
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 189, Short.MAX_VALUE)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 26, Short.MAX_VALUE)
+        );
+
+        jPanel2.add(jPanel3);
+
+        btnHitung.setText("Hitung");
+        btnHitung.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHitungActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnHitung);
 
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel3.setText("Jumlah Hari :");
         jPanel2.add(jLabel3);
-        jPanel2.add(jLabel4);
+        jPanel2.add(lblHari);
 
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel5.setText("Tahun Kabisat :");
         jPanel2.add(jLabel5);
-        jPanel2.add(jLabel6);
+        jPanel2.add(lblKabisat);
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void cbbBulanItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbbBulanItemStateChanged
+        updateCalendar();
+    }//GEN-LAST:event_cbbBulanItemStateChanged
+
+    private void spTahunStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spTahunStateChanged
+        updateCalendar();
+    }//GEN-LAST:event_spTahunStateChanged
+
+    private void btnHitungActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHitungActionPerformed
+        updateHasil();
+    }//GEN-LAST:event_btnHitungActionPerformed
+
+    // Method to update calendar based on combo box and spinner selection
+    private void updateCalendar() {
+        int selectedMonth = cbbBulan.getSelectedIndex();  // Get selected month index
+        int selectedYear = (Integer) spTahun.getValue();  // Get selected year
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, selectedYear);
+        calendar.set(Calendar.MONTH, selectedMonth);
+
+        // Set the calendar to the new date
+        jCalendar1.setDate(calendar.getTime());
+    }
+
+    // Method to update the combo box and spinner based on the calendar date
+    private void updateComboBox() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(jCalendar1.getDate());
+
+        int month = calendar.get(Calendar.MONTH);  // Get month index from calendar
+        int year = calendar.get(Calendar.YEAR);   // Get year from calendar
+
+        cbbBulan.setSelectedIndex(month);  // Set the selected month in the combo box
+        spTahun.setValue(year);            // Set the selected year in the spinner
+    }
+
+    private void updateHasil() {
+        // Get the current date from the JCalendar component
+        LocalDate selectedDate = jCalendar1.getDate().toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+
+        // Get the number of days in the selected month and year using LocalDate
+        int numberOfDays = selectedDate.lengthOfMonth();   // This will give the number of days in the month
+
+        // Update lblHari label with the number of days in the selected month
+        lblHari.setText(String.valueOf(numberOfDays));
+
+        // Check if the selected year is a leap year using LocalDate
+        boolean isLeapYear = selectedDate.isLeapYear();
+
+        // Update lblKabisat label with TRUE/FALSE based on leap year status
+        lblKabisat.setText(isLeapYear ? "TRUE" : "FALSE");
+    }
 
     /**
      * @param args the command line arguments
@@ -136,16 +255,18 @@ public class PerhitunganHariFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnHitung;
+    private javax.swing.JComboBox<String> cbbBulan;
     private com.toedter.calendar.JCalendar jCalendar1;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JSpinner jSpinner1;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JLabel lblHari;
+    private javax.swing.JLabel lblKabisat;
+    private javax.swing.JSpinner spTahun;
     // End of variables declaration//GEN-END:variables
 }
