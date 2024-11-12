@@ -3,6 +3,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Calendar;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -55,21 +56,40 @@ public class PerhitunganHariFrame extends javax.swing.JFrame {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        jPanel3 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         cbbBulan = new javax.swing.JComboBox<>();
         spTahun = new javax.swing.JSpinner();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jCalendar1 = new com.toedter.calendar.JCalendar();
+        jCalendar2 = new com.toedter.calendar.JCalendar();
+        jLabel6 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
         btnHitung = new javax.swing.JButton();
+        btnHitungSelisih = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         lblHari = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         lblKabisat = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        lblPertama = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        lblTerakhir = new javax.swing.JLabel();
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Aplikasi Perhitungan Hari");
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
@@ -121,24 +141,25 @@ public class PerhitunganHariFrame extends javax.swing.JFrame {
         gridBagConstraints.ipadx = 1;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel1.add(jCalendar1, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(jCalendar2, gridBagConstraints);
+
+        jLabel6.setText("Calendar Selisih");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel6, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.NORTH);
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(8, 8, 8, 8));
-        jPanel2.setLayout(new java.awt.GridLayout(3, 2, 6, 4));
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 189, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 26, Short.MAX_VALUE)
-        );
-
-        jPanel2.add(jPanel3);
+        jPanel2.setLayout(new java.awt.GridLayout(5, 2, 6, 4));
 
         btnHitung.setText("Hitung");
         btnHitung.addActionListener(new java.awt.event.ActionListener() {
@@ -147,6 +168,14 @@ public class PerhitunganHariFrame extends javax.swing.JFrame {
             }
         });
         jPanel2.add(btnHitung);
+
+        btnHitungSelisih.setText("Hitung Selisih");
+        btnHitungSelisih.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHitungSelisihActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnHitungSelisih);
 
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel3.setText("Jumlah Hari :");
@@ -157,6 +186,16 @@ public class PerhitunganHariFrame extends javax.swing.JFrame {
         jLabel5.setText("Tahun Kabisat :");
         jPanel2.add(jLabel5);
         jPanel2.add(lblKabisat);
+
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabel4.setText("Hari Pertama :");
+        jPanel2.add(jLabel4);
+        jPanel2.add(lblPertama);
+
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabel7.setText("Hari Terakhir :");
+        jPanel2.add(jLabel7);
+        jPanel2.add(lblTerakhir);
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.CENTER);
 
@@ -174,6 +213,10 @@ public class PerhitunganHariFrame extends javax.swing.JFrame {
     private void btnHitungActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHitungActionPerformed
         updateHasil();
     }//GEN-LAST:event_btnHitungActionPerformed
+
+    private void btnHitungSelisihActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHitungSelisihActionPerformed
+        calculateDateDifference();
+    }//GEN-LAST:event_btnHitungSelisihActionPerformed
 
     // Method to update calendar based on combo box and spinner selection
     private void updateCalendar() {
@@ -217,6 +260,48 @@ public class PerhitunganHariFrame extends javax.swing.JFrame {
 
         // Update lblKabisat label with TRUE/FALSE based on leap year status
         lblKabisat.setText(isLeapYear ? "TRUE" : "FALSE");
+
+        // Get the first day of the selected month (always the 1st of the month)
+        LocalDate firstDay = selectedDate.withDayOfMonth(1);
+        // Get the last day of the selected month
+        LocalDate lastDay = selectedDate.withDayOfMonth(numberOfDays);
+
+        // Get the day of the week for the first and last day
+        String firstDayOfWeek = firstDay.getDayOfWeek().toString(); // Get the day of the week
+        String lastDayOfWeek = lastDay.getDayOfWeek().toString();   // Get the day of the week
+
+        // Convert to a more readable format (first letter uppercase, rest lowercase)
+        firstDayOfWeek = firstDayOfWeek.substring(0, 1).toUpperCase() + firstDayOfWeek.substring(1).toLowerCase();
+        lastDayOfWeek = lastDayOfWeek.substring(0, 1).toUpperCase() + lastDayOfWeek.substring(1).toLowerCase();
+
+        // Update lblPertama with the day of the week and the date for the first day
+        lblPertama.setText(firstDayOfWeek + ", " + firstDay.toString());  // Format: "Monday, 2024-02-01"
+
+        // Update lblTerakhir with the day of the week and the date for the last day
+        lblTerakhir.setText(lastDayOfWeek + ", " + lastDay.toString());   // Format: "Tuesday, 2024-02-29"
+    }
+
+    private void calculateDateDifference() {
+        // Get the selected dates from both JCalendar components and convert them to LocalDate
+        LocalDate date1 = jCalendar1.getDate().toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+
+        LocalDate date2 = jCalendar2.getDate().toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+
+        // Calculate the difference between the two dates
+        long daysBetween = java.time.temporal.ChronoUnit.DAYS.between(date1, date2);
+
+        // Prepare the message to display, including the dates and the difference
+        String message = "You are comparing the following dates:\n"
+                + "Date 1: " + date1.toString() + " (" + date1.getDayOfWeek() + ")\n"
+                + "Date 2: " + date2.toString() + " (" + date2.getDayOfWeek() + ")\n\n"
+                + "The difference between the two dates is: " + Math.abs(daysBetween) + " days.";
+
+        // Show the message in a JOptionPane dialog
+        JOptionPane.showMessageDialog(this, message, "Date Difference", JOptionPane.INFORMATION_MESSAGE);
     }
 
     /**
@@ -256,17 +341,24 @@ public class PerhitunganHariFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnHitung;
+    private javax.swing.JButton btnHitungSelisih;
     private javax.swing.JComboBox<String> cbbBulan;
     private com.toedter.calendar.JCalendar jCalendar1;
+    private com.toedter.calendar.JCalendar jCalendar2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JLabel lblHari;
     private javax.swing.JLabel lblKabisat;
+    private javax.swing.JLabel lblPertama;
+    private javax.swing.JLabel lblTerakhir;
     private javax.swing.JSpinner spTahun;
     // End of variables declaration//GEN-END:variables
 }
